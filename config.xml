@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="org.apache.cordova.toDoList" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>toDoList</name>
+    <description>
+        A sample Apache Cordova application that responds to the deviceready event.
+    </description>
+    <author email="keller.guillaume68@gmail.com" href="kg.isn.free.fr/dev">
+        Guigui
+    </author>
+    <content src="index.html" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <icon src="./www/img/logo.png" density="ldpi" />
+        <icon src="./www/img/logo.png" density="mdpi" />
+        <icon src="./www/img/logo.png" density="hdpi" />
+        <icon src="./www/img/logo.png" density="xhdpi" />
+
+
+        <splash src="/www/img/logoGrand.png" density="port-hdpi" />
+        <splash src="/www/img/logoGrand.png" density="port-ldpi" />
+        <splash src="/www/img/logoGrand.png" density="port-mdpi" />
+        <splash src="/www/img/logoGrand.png" density="port-xhdpi" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+
+
+    <preference name="SplashScreenDelay" value="500" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="FadeSplashScreen" value="true"/>
+</widget>

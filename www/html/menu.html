@@ -1,0 +1,42 @@
+<ons-page id="menuPage">
+
+  <ons-list-title>Default</ons-list-title>
+  <ons-list id="default-category-list">
+
+    <ons-list-item tappable>
+      <div class="left">
+        <ons-radio name="categoryGroup" input-id="r-all" checked></ons-radio>
+      </div>
+
+      <label class="center" for="r-all">Tout</label>
+    </ons-list-item>
+
+    <ons-list-item tappable category-id="">
+      <div class="left">
+        <ons-radio name="categoryGroup" input-id="r-no"></ons-radio>
+      </div>
+
+      <label class="center" for="r-no">Sans catégorie</label>
+    </ons-list-item>
+
+  </ons-list>
+
+  <ons-list-title>Catégories personnalisée</ons-list-title>
+  <ons-list id="custom-category-list">
+  </ons-list>
+
+  <ons-list-title>Tout supprimer</ons-list-title>
+  <ons-list id="custom-category-list">
+      <ons-button component="button/supressAll" modifier="large" id ="SupressAll">Supprimer</ons-button>
+  </ons-list>
+
+  <ons-list-title>Retirer les tâches passées</ons-list-title>
+  <ons-list id="custom-category-list">
+      <ons-button component="button/suppressDatePassed" modifier="large" id ="suppressDatePassed">Supprimer</ons-button>
+  </ons-list>
+
+  
+  <ons-list-title>Keller Guillaume @IUT NC 2019-2020</ons-list-title>
+  
+
+</ons-page>

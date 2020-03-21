@@ -1,0 +1,73 @@
+<ons-page id="newTaskPage">
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button>To Do S</ons-back-button>
+    </div>
+    <div class="center">Nouvelle tâche</div>
+    <div class="right">
+      <ons-if platform="android">
+        <ons-toolbar-button component="button/save-task">
+          <ons-icon icon="md-save"></ons-icon>
+        </ons-toolbar-button>
+      </ons-if>
+    </div>
+  </ons-toolbar>
+
+  <ons-list-title>Ajouter une nouvelle tâche</ons-list-title>
+  <ons-list>
+    <ons-list-item modifier="nodivider">
+      <div class="center">
+
+        <ons-input id="title-input" type="text" placeholder="Je voudrais..." float autofocus></ons-input>
+
+
+
+      </div>
+    </ons-list-item>
+    <ons-list-item modifier="nodivider">
+      <div class="center">
+        <ons-input id="category-input" type="text" placeholder="Catégorie" float></ons-input>
+        <ons-select id="choose-sel">
+          <option value="default">Choisir une catégorie déjà remplie :</option>
+        </ons-select>
+      </div>
+    </ons-list-item>
+    <ons-list-item modifier="nodivider">
+      <div class="center">
+        <ons-input id="description-input" type="text" placeholder="Description" float></ons-input>
+      </div>
+    </ons-list-item>
+  </ons-list>
+
+  <ons-list-title>Autres options</ons-list-title>
+  <ons-list>
+    <ons-list-item modifier="nodivider">
+      <label class="center" for="inner-highlight-input">
+        Surligner ?
+      </label>
+      <div class="right">
+        <ons-switch id="highlight-input" input-id="inner-highlight-input"></ons-switch>
+      </div>
+    </ons-list-item>
+    <ons-list-item modifier="nodivider">
+        <label class="center" for="inner-urgent-input">
+          Urgent ?
+        </label>
+        <div class="right">
+          <ons-switch id="urgent-input" input-id="inner-urgent-input"></ons-switch>
+        </div>
+      </ons-list-item>
+      <ons-list-item modifier="nodivider">
+          <label class="center" for="inner-date-input">
+            Date limite ?
+          </label>
+          <div class="right">
+            <ons-input type="date" id="date-input" input-id="inner-date-input"></ons-input>
+          </div>
+        </ons-list-item>
+  </ons-list>
+
+  <ons-if platform="ios other">
+    <ons-button modifier="large" component="button/save-task">Ajouter la nouvelle tâche</ons-button>
+  </ons-if>
+</ons-page>
