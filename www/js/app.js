@@ -6,6 +6,8 @@ const lancement = false;
 window.myApp = {};
 
 document.addEventListener(`init`, function (event) {
+  console.log(event);
+
   var page = event.target;
 
   // Each page calls its own initialization controller.
@@ -15,17 +17,27 @@ document.addEventListener(`init`, function (event) {
 
   // Fill the lists with initial data when the pages we need are ready.
   // This only happens once at the beginning of the app.
-  if (page.id === `menuPage` || page.id === `pendingTasksPage`) {
+
     if (document.querySelector(`#menuPage`)
+
       && document.querySelector(`#todoTasksPage`)
       && !document.querySelector(`#todoTasksPage ons-list-item`)
-      ) {
+
+      && document.querySelector(`#pendingTasksPage`)
+      && !document.querySelector(`#pendingTasksPage ons-list-item`)
+
+      && document.querySelector(`#completedTasksPage`)
+      && !document.querySelector(`#completedTasksPage ons-list-item`)
+
+      && document.querySelector(`#archivedTasksPage`)
+      && !document.querySelector(`#archivedTasksPage ons-list-item`)
+    ) {
 
       let initialised = window.localStorage.getItem("init");
 
       if (!initialised || lancement) {
 
-        
+
         let date = new Date(Date.now());
         date.setDate(date.getDate() + 4);
 
@@ -76,7 +88,7 @@ document.addEventListener(`init`, function (event) {
           myApp.services.tasks.create(data);
         });
       } else {
-        console.log("Créez de nouvelles tâches");
+        ons.notification.toast("Créez de nouvelles tâches", { timeout: 3000, animation: 'fall' });
 
       }
 
@@ -85,6 +97,9 @@ document.addEventListener(`init`, function (event) {
       // myApp.services.fixtures.forEach(function (data) {
       //   myApp.services.tasks.create(data);
       // });
+    } else {
+      console.log("3");
+
     }
   }
 });

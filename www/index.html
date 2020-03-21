@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Application todo Liste avec OnsenUI</title>
-
-  <script src="lib/onsen/js/onsenui.js"></script>
-  <!-- ENLEVER A LA FIN -->
-  <script>ons.platform.select('android')
-  console.log("Retirer dans le header de l'index le param qui force android !!!")</script>
-
-  <script src="js/app.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
 
   <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
   <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
@@ -69,25 +61,34 @@
 
       <!-- Auto-positioned Tabbar: top on Android, bottom on iOS/other. -->
       <ons-tabbar id="myTabbar" position="auto">
-        
+
         <ons-tab page="html/todo_tasks.html" label="A faire" active>
         </ons-tab>
-        
+
         <ons-tab page="html/pending_tasks.html" label="En cours">
         </ons-tab>
-        
+
         <ons-tab page="html/completed_tasks.html" label="Completée">
         </ons-tab>
 
-        <ons-tab page="html/archived_tasks.html" >
+        <ons-tab page="html/archived_tasks.html">
           <ons-icon icon="fa-calendar-times" size="1.4em, material:1.4em"></ons-icon>
         </ons-tab>
-      
       </ons-tabbar>
 
 
     </ons-page>
   </template>
+
+  <script src="lib/onsen/js/onsenui.js"></script>
+  <!-- ENLEVER A LA FIN -->
+  <script>ons.platform.select('android')
+    console.log("Retirer dans le header de l'index le param qui force android !!!")</script>
+
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+
 
 </body>
 
