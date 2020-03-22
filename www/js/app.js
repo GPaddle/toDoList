@@ -6,7 +6,7 @@ const lancement = false;
 window.myApp = {};
 
 document.addEventListener(`init`, function (event) {
-  console.log(event);
+  // console.log(event);
 
   var page = event.target;
 
@@ -17,6 +17,14 @@ document.addEventListener(`init`, function (event) {
 
   // Fill the lists with initial data when the pages we need are ready.
   // This only happens once at the beginning of the app.
+
+  //WARNING
+  //Ecrire ici la dernière ressource à charger ici 
+  if (page.id === `menuPage` 
+  || page.id === `todoTasksPage` 
+  || page.id === `pendingTasksPage` 
+  || page.id === `completedTasksPage` 
+  || page.id === `archivedTasksPage`) {
 
     if (document.querySelector(`#menuPage`)
 
@@ -97,9 +105,6 @@ document.addEventListener(`init`, function (event) {
       // myApp.services.fixtures.forEach(function (data) {
       //   myApp.services.tasks.create(data);
       // });
-    } else {
-      console.log("3");
-
     }
   }
 });
