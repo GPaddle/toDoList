@@ -46,14 +46,15 @@ myApp.controllers = {
           message: `Les données précédentes vont être supprimées.`,
           buttonLabels: [`Abandonner`, `Confirmer`]
         }
-      ).then(function (buttonIndex) {
+      ).then(function (buttonIndex) {        
+
         if (buttonIndex === 1) {
           // Si `confirmer` a été pressé, on efface tout.
-          document.querySelector("#todo-list").innerHTML = "";
-          document.querySelector("#pending-list").innerHTML = "";
-          document.querySelector("#completed-list").innerHTML = "";
-          document.querySelector("#archived-list").innerHTML = "";
-          window.localStorage.setItem("liste", "");
+          
+          myApp.services.tasks.removeAll();
+          // window.localStorage.setItem("liste", "");
+
+
         }
       });
     };
@@ -67,50 +68,21 @@ myApp.controllers = {
         }
       ).then(function (buttonIndex) {
         if (buttonIndex === 1) {
-
-          //On filtre sur la date
-          let contentList = JSON.parse(window.localStorage.getItem("liste"));
-
-          if (contentList) {
-
-            let today = new Date(Date.now());
-
-            function condition(item) {
-              return (new Date(item.date) < today && item.state != 4);
-            }
-
-            let i = contentList.findIndex(e => condition(e));
-
-            let todoList = document.querySelector("#todo-list");
-            let pendingList = document.querySelector("#pending-list");
-            let completedList = document.querySelector("#completed-list");
-
-            console.log(todoList);
-
-            while (i != -1) {
-
-              console.log(contentList[i]);
-              contentList[i].state = 4;
-              console.log(page);
-
-              i = contentList.findIndex(e => condition(e));
-            }
-
-            window.localStorage.setItem("liste", JSON.stringify(contentList));
-
-            todoList.innerHTML = "";
-            pendingList.innerHTML = "";
-            completedList.innerHTML = "";
-
-            JSON.parse(window.localStorage.getItem("liste")).forEach(element => {
-              myApp.services.tasks.create(element);
-            });
-
-          }
+          myApp.services.tasks.majDatePassee()
         }
       });
 
     };
+
+    let toggleSwitch = page.querySelector("#archiveAuto")
+    toggleSwitch.onchange = function () {
+      window.localStorage.setItem("archiveAuto",toggleSwitch.checked);
+      if (toggleSwitch.checked) {
+        ons.notification.toast("Les tâches s'archiveront automatiquement dès le prochain redémarrage", { timeout: 3000, animation: 'ascend' });
+      }else{
+        ons.notification.toast("Archivage automatique désactivé", { timeout: 3000, animation: 'ascend' });
+      }
+    }
 
 
 
@@ -230,6 +202,7 @@ myApp.controllers = {
 
     let dateInput = page.querySelector(`#date-input`)
     dateInput.value = date;
+
 
 
     // Set button functionality to save an existing task.

@@ -10,6 +10,68 @@ myApp.services = {
   /////////////////
   tasks: {
 
+    removeOneList: function (name) {
+      document.querySelectorAll("#" + name + " ons-list-item").forEach(element => {
+        myApp.services.tasks.remove(element);
+        
+        // console.log(element);
+      });
+
+    },
+
+    removeAll: function () {
+
+      myApp.services.tasks.removeOneList("todo-list");
+      myApp.services.tasks.removeOneList("pending-list");
+      myApp.services.tasks.removeOneList("completed-list");
+      myApp.services.tasks.removeOneList("archived-list");
+
+    },
+
+    resetLists: function () {
+      document.querySelector("#todo-list").innerHTML = "";
+      document.querySelector("#pending-list").innerHTML = "";
+      document.querySelector("#completed-list").innerHTML = "";
+      document.querySelector("#archived-list").innerHTML = "";
+    },
+
+    majDatePassee: function () {
+      //On filtre sur la date
+      let listeLocStor = window.localStorage.getItem("liste");
+      let contentList;
+      if (listeLocStor) {
+        contentList = JSON.parse(listeLocStor);
+      } else {
+        contentList = "";
+      }
+
+
+      if (contentList) {
+
+        let today = new Date(Date.now());
+
+        function condition(item) {
+          return (new Date(item.date) < today && item.state != 4);
+        }
+
+        let i = contentList.findIndex(e => condition(e));
+
+        while (i != -1) {
+          contentList[i].state = 4;
+
+          i = contentList.findIndex(e => condition(e));
+        }
+        window.localStorage.setItem("liste", JSON.stringify(contentList));
+
+        myApp.services.tasks.resetLists();
+
+        JSON.parse(window.localStorage.getItem("liste")).forEach(element => {
+          myApp.services.tasks.create(element);
+        });
+
+      }
+    },
+
     // Creates a new task and attaches it to the pending task list.
     create: function (data) {
 
@@ -260,20 +322,24 @@ myApp.services = {
         // Remove the item before updating the categories.
         taskItem.remove();
 
-        let list = JSON.parse(window.localStorage.getItem("liste"));
+        // console.log(window.localStorage.getItem("liste"));
+        
 
+        if (window.localStorage.getItem("liste")) {
+          let list = JSON.parse(window.localStorage.getItem("liste"));
+          const i = list.findIndex(e => e.title === taskItem.data.title);
+          // console.log(i);
+          // update the element
+  
+          //On le retire de la liste
+          list.splice(i, 1);
+  
+          window.localStorage.setItem("liste", JSON.stringify(list));
+  
+          // Check if the category has no items and remove it in that case.
+          myApp.services.categories.updateRemove(taskItem.data.category);
+        }
 
-        const i = list.findIndex(e => e.title === taskItem.data.title);
-        console.log(i);
-        // update the element
-
-        //On le retire de la liste
-        list.splice(i, 1);
-
-        window.localStorage.setItem("liste", JSON.stringify(list));
-
-        // Check if the category has no items and remove it in that case.
-        myApp.services.categories.updateRemove(taskItem.data.category);
       });
     }
   },
@@ -298,14 +364,6 @@ myApp.services = {
         `</label>
         </ons-list-item>`
       );
-
-
-
-
-
-
-
-
 
       let categories = JSON.parse(window.localStorage.getItem("catégories"));
       if (categories) {
@@ -344,6 +402,7 @@ myApp.services = {
 
     // On task deletion/update, updates the category list removing categories without tasks if needed.
     updateRemove: function (categoryLabel) {
+
       var categoryId = myApp.services.categories.parseId(categoryLabel);
       var categoryItem = document.querySelector(`#tabbarPage ons-list-item[category="` + categoryId + `"]`);
 
@@ -358,9 +417,12 @@ myApp.services = {
         //On cherche l'index à retirer : on compare l'ID
         //On utilise la version parsé (sans majuscule ni espace)
         const i = categories.findIndex(e => myApp.services.categories.parseId(e) === categoryId);
-        console.log(i);
+        // console.log(i);
         //On le retire de la liste
         categories.splice(i, 1);
+
+        // console.log(categories);
+        
 
         //On remet l'objet dans le champ catégorie
         window.localStorage.setItem("catégories", JSON.stringify(categories));
@@ -430,6 +492,8 @@ myApp.services = {
 
     // Remove animation for task deletion.
     remove: function (listItem, callback) {
+      // console.log(listItem);
+      
       listItem.classList.add(`animation-remove`);
       listItem.classList.add(`hide-children`);
 
@@ -437,27 +501,6 @@ myApp.services = {
         callback();
       }, 750);
     }
-  },
+  }
 
-  ////////////////////////
-  // Initial Data Service //
-  ////////////////////////
-
-
-  // fixtures: [
-  //   {
-  //     title: `Register in the community forum`,
-  //     category: `Super important`,
-  //     description: `Some description.`,
-  //     highlight: false,
-  //     urgent: false
-  //   },
-  //   {
-  //     title: `Enjoy an Onsen with Onsen UI team`,
-  //     category: `Personal`,
-  //     description: `Some description.`,
-  //     highlight: false,
-  //     urgent: false
-  //   }
-  // ]
 };

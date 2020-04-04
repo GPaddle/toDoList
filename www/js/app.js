@@ -20,11 +20,11 @@ document.addEventListener(`init`, function (event) {
 
   //WARNING
   //Ecrire ici la dernière ressource à charger ici 
-  if (page.id === `menuPage` 
-  || page.id === `todoTasksPage` 
-  || page.id === `pendingTasksPage` 
-  || page.id === `completedTasksPage` 
-  || page.id === `archivedTasksPage`) {
+  if (page.id === `menuPage`
+    || page.id === `todoTasksPage`
+    || page.id === `pendingTasksPage`
+    || page.id === `completedTasksPage`
+    || page.id === `archivedTasksPage`) {
 
     if (document.querySelector(`#menuPage`)
 
@@ -42,7 +42,7 @@ document.addEventListener(`init`, function (event) {
     ) {
 
       let initialised = window.localStorage.getItem("init");
-
+      
       if (!initialised || lancement) {
 
 
@@ -85,6 +85,7 @@ document.addEventListener(`init`, function (event) {
         window.localStorage.setItem("init", true);
         window.localStorage.setItem("liste", JSON.stringify(liste));
         window.localStorage.setItem("catégories", JSON.stringify(categories));
+        window.localStorage.setItem("archiveAuto", true);
 
       }
 
@@ -96,8 +97,16 @@ document.addEventListener(`init`, function (event) {
           myApp.services.tasks.create(data);
         });
       } else {
-        ons.notification.toast("Créez de nouvelles tâches", { timeout: 3000, animation: 'fall' });
+        ons.notification.toast("Créez de nouvelles tâches", { timeout: 3000, animation: 'ascend' });
+      }
 
+      let archiveAuto = window.localStorage.getItem("archiveAuto");
+
+      let valeur = archiveAuto === "true" ? true : false;
+      document.querySelector("#archiveAuto").checked = valeur;
+
+      if (valeur) {
+        myApp.services.tasks.majDatePassee();
       }
 
 

@@ -32,7 +32,17 @@
 
   <ons-list-title>Retirer les tâches passées</ons-list-title>
   <ons-list id="custom-category-list">
-      <ons-button component="button/suppressDatePassed" modifier="large" id ="suppressDatePassed">Archiver</ons-button>
+    
+      <ons-list-item>
+          <div class="center">
+            Archive automatique 
+          </div>
+          <div class="right">
+            <ons-switch id="archiveAuto"></ons-switch>
+          </div>
+        </ons-list-item>
+
+    <ons-button component="button/suppressDatePassed" modifier="large" id ="suppressDatePassed">Archiver</ons-button>
   </ons-list>
 
   
