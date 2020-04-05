@@ -10,10 +10,99 @@ myApp.services = {
   /////////////////
   tasks: {
 
+    sort: function () {
+      ons.notification.confirm(
+        {
+          title: `Trie`,
+          message: `Selectionner par quoi trier`,
+          buttonLabels: ["titre", "date", "abandonner"]
+        }
+      ).then(function (buttonIndex) {
+
+        let listeParse = JSON.parse(localStorage.getItem("liste"));
+
+        let tri;
+
+        ons.notification.confirm(
+          {
+            title: `Sens`,
+            message: `Comment trier ?`,
+            buttonLabels: ["croissant", "décroissant"]
+          }
+          ).then(function (buttonIndex2) {
+            
+            
+            switch (buttonIndex) {
+              case 0:
+                  console.log("b");
+              const triTitre = function (a, b) {
+                if (buttonIndex2 === 0) {
+                  return a.title > b.title;
+                } else {
+                  return !(a.title > b.title);
+                }
+              }
+              tri = triTitre;
+              break;
+            case 1:
+              
+              const triDate = function (a, b) {
+                if (buttonIndex2 === 0) {
+                  if (a.date === "") {
+                    return true
+                  } else if (b.date === "") {
+                    return false
+                  }
+                  return a.date > b.date;
+                }else{
+                  if (a.date === "") {
+                    return !true
+                  } else if (b.date === "") {
+                    return !false
+                  }
+                  return !(a.date > b.date);
+                  
+                }
+              }
+              tri = triDate;
+              
+              break;
+            default:
+              break;
+          }
+
+          listeParse.sort(tri);
+        myApp.services.tasks.resetLists();
+
+        listeParse.forEach(element => {
+          myApp.services.tasks.create(element);
+        });
+
+
+        })
+
+        
+
+      })
+
+    },
+
+    ajoutDansLocalStorage: function (content) {
+      let datas;
+      try {
+        datas = JSON.parse(window.localStorage.getItem("liste"));
+        datas.push(content);
+      }
+      catch (error) {
+        datas = [content];
+      }
+      window.localStorage.setItem("liste", JSON.stringify(datas));
+    },
+
     removeOneList: function (name) {
       document.querySelectorAll("#" + name + " ons-list-item").forEach(element => {
         myApp.services.tasks.remove(element);
-        
+
         // console.log(element);
       });
 
@@ -51,7 +140,18 @@ myApp.services = {
         let today = new Date(Date.now());
 
         function condition(item) {
-          return (new Date(item.date) < today && item.state != 4);
+          let dateItem = new Date(item.date);
+          const today = new Date()
+
+
+          //Pas aujourd'hui
+          //Et dans le passé
+          //Et pas déjà déjà archivé
+          return (!(
+            dateItem.getDate() == today.getDate() &&
+            dateItem.getMonth() == today.getMonth() &&
+            dateItem.getFullYear() == today.getFullYear()
+          ) && dateItem < today && item.state != 4);
         }
 
         let i = contentList.findIndex(e => condition(e));
@@ -72,7 +172,7 @@ myApp.services = {
       }
     },
 
-    // Creates a new task and attaches it to the pending task list.
+    // Fabrique une nouvelle tâche et la positionne dans la bonne page
     create: function (data) {
 
 
@@ -82,6 +182,10 @@ myApp.services = {
       let state0 = data.state == 0 ? currentClass : "";
       let state1 = data.state == 1 ? currentClass : "";
       let state2 = data.state == 2 ? currentClass : "";
+
+
+      let dateIcone = data.date !== "" ? "<ons-icon id='trash' style='color: #0003' icon='fa-clock'></ons-icon>" : "";
+
 
       // Task item template.
       var taskItem = ons.createElement(
@@ -106,9 +210,10 @@ myApp.services = {
           </label>
 
           <div class="center">
-            ${data.title}
+          ${data.title}
           </div>
           <div class="right">
+          ${dateIcone}
            <ons-icon id="trash" style="color: red; padding-left: 4px" icon="ion-ios-trash-outline, material:md-delete"></ons-icon>
           </div>
         </ons-list-item>`
@@ -323,19 +428,19 @@ myApp.services = {
         taskItem.remove();
 
         // console.log(window.localStorage.getItem("liste"));
-        
+
 
         if (window.localStorage.getItem("liste")) {
           let list = JSON.parse(window.localStorage.getItem("liste"));
           const i = list.findIndex(e => e.title === taskItem.data.title);
           // console.log(i);
           // update the element
-  
+
           //On le retire de la liste
           list.splice(i, 1);
-  
+
           window.localStorage.setItem("liste", JSON.stringify(list));
-  
+
           // Check if the category has no items and remove it in that case.
           myApp.services.categories.updateRemove(taskItem.data.category);
         }
@@ -422,7 +527,7 @@ myApp.services = {
         categories.splice(i, 1);
 
         // console.log(categories);
-        
+
 
         //On remet l'objet dans le champ catégorie
         window.localStorage.setItem("catégories", JSON.stringify(categories));
@@ -493,13 +598,157 @@ myApp.services = {
     // Remove animation for task deletion.
     remove: function (listItem, callback) {
       // console.log(listItem);
-      
+
       listItem.classList.add(`animation-remove`);
       listItem.classList.add(`hide-children`);
 
       setTimeout(function () {
         callback();
       }, 750);
+    }
+  },
+
+  actions: {
+    affichageMenu: function () {
+      ons.notification.confirm(
+        {
+          title: `Que voulez-vous faire ?`,
+          message: `Ci-dessous, les tâches prédéfinies.`,
+          buttonLabels: [`Ajouter ma liste de courses`, `Affaires pour les vacances`, `Affaires pour le week-end`, `Annuler`]
+        }
+      ).then(function (buttonIndex) {
+
+        let createTaskContent = function (name, type, newDate) {
+          return {
+            title: name,
+            category: type,
+            description: type,
+            highlight: true,
+            urgent: true,
+            state: 0,
+            date: newDate.toISOString().substring(0, 10)
+          }
+        }
+        let liste;
+        let now = new Date(Date.now());
+        let addDays = 1;
+
+        let newDate = new Date(now.getTime() + addDays * 24 * 60 * 60 * 1000);
+
+        switch (buttonIndex) {
+          case 0:
+
+            let labels = [`Ajourd'hui`, `Demain`, `Dans la semaine`, `Annuler`]
+
+            ons.notification.confirm(
+              {
+                title: `Quand ?`,
+                message: ` `,
+                buttonLabels: labels
+              }
+            ).then(function (buttonIndex) {
+
+              ons.notification.toast("Courses " + labels[buttonIndex], { timeout: 3000, animation: 'ascend' });
+
+
+              switch (buttonIndex) {
+                case 0:
+                  addDays = 0
+                  break;
+
+                case 1:
+                  addDays = 1
+                  //valeur par défaut
+                  break;
+
+                case 2:
+                  addDays = 7
+                  break;
+
+                default:
+                  break;
+              }
+
+              liste = ["Oeufs", "Lait", "Farine", "Pates"];
+
+              newDate = new Date(now.getTime() + addDays * 24 * 60 * 60 * 1000);
+
+              const correspondance = function (nb) {
+                let jour;
+                switch (nb) {
+                  case 0:
+                    jour = "Lundi"
+                    break;
+                  case 1:
+                    jour = "Mardi"
+
+                    break;
+                  case 2:
+                    jour = "Mercredi"
+
+                    break;
+                  case 3:
+                    jour = "Jeudi"
+
+                    break;
+                  case 4:
+                    jour = "Vendredi"
+
+                    break;
+                  case 5:
+                    jour = "Samedi"
+
+                    break;
+                  case 6:
+                    jour = "Dimanche"
+                    break;
+                }
+                return jour;
+              }
+
+              liste.forEach(element => {
+                let content = createTaskContent("C|" + correspondance(newDate.getDay()) + " : " + element, "Courses", newDate);
+                myApp.services.tasks.ajoutDansLocalStorage(content);
+                myApp.services.tasks.create(content);
+              });
+            })
+
+            break;
+
+          case 1:
+            ons.notification.toast("Vacances ?", { timeout: 3000, animation: 'ascend' });
+
+            liste = ["Maillots de bain", "Creme solaire"];
+
+            liste.forEach(element => {
+              let content = createTaskContent("Vac|" + element, "Vacances", newDate);
+              myApp.services.tasks.ajoutDansLocalStorage(content);
+              myApp.services.tasks.create(content);
+            });
+            break;
+
+          case 2:
+            ons.notification.toast("Week-end ?", { timeout: 3000, animation: 'ascend' });
+
+            liste = ["Sandales", "Maillot de bain"];
+
+            liste.forEach(element => {
+              let content = createTaskContent("WE|" + element, "Week-end", newDate);
+              myApp.services.tasks.ajoutDansLocalStorage(content);
+              myApp.services.tasks.create(content);
+            });
+
+            break;
+
+          case 3:
+            break;
+
+          default:
+            ons.notification.toast("Comment tu as fait ça ?!", { timeout: 2000, animation: 'ascend' });
+
+            break;
+        }
+      });
     }
   }
 

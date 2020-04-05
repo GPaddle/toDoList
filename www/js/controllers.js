@@ -10,6 +10,15 @@ myApp.controllers = {
   // Tabbar Page Controller //
   //////////////////////////
   tabbarPage: function (page) {
+
+    page.querySelector(`[component="button/other-tasks"]`).addEventListener("click",function() {
+      myApp.services.actions.affichageMenu();
+    })
+
+    page.querySelector(`[component="button/sort-tasks"]`).addEventListener("click",function() {
+      myApp.services.tasks.sort();
+    })
+
     // Set button functionality to open/close the menu.
     page.querySelector(`[component="button/menu"]`).onclick = function () {
       document.querySelector(`#mySplitter`).left.toggle();
@@ -141,18 +150,7 @@ myApp.controllers = {
             date: page.querySelector(`#date-input`).value
           };
 
-          let datas;
-          try {
-            datas = JSON.parse(window.localStorage.getItem("liste"));
-            datas.push(content);
-          } catch (error) {
-            datas = [content];
-          }
-
-          //          console.log(datas);
-
-
-          window.localStorage.setItem("liste", JSON.stringify(datas));
+          myApp.services.tasks.ajoutDansLocalStorage(content);
 
           myApp.services.tasks.create(content);
 
@@ -260,4 +258,5 @@ myApp.controllers = {
       }
     };
   }
+  
 };

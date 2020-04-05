@@ -45,6 +45,14 @@
         <div class="center">To Do s</div>
 
         <div class="right">
+            <ons-toolbar-button component="button/other-tasks">
+              <ons-icon icon="fa-ellipsis-h"></ons-icon>
+            </ons-toolbar-button>
+            
+            <ons-toolbar-button component="button/sort-tasks">
+              <ons-icon icon="fa-sort-amount-up-alt"></ons-icon>
+            </ons-toolbar-button>
+
           <!-- Toolbar-button  only visible for iOS/other. -->
           <ons-if platform="ios other">
             <ons-toolbar-button component="button/new-task">Nouveau</ons-toolbar-button>
