@@ -184,7 +184,7 @@ myApp.services = {
       let state2 = data.state == 2 ? currentClass : "";
 
 
-      let dateIcone = data.date !== "" ? "<ons-icon id='trash' style='color: #0003' icon='fa-clock'></ons-icon>" : "";
+      let dateIcone = data.date !== "" ? "<ons-icon style='color: #0003' icon='fa-clock'></ons-icon>" : "";
 
 
       // Task item template.
@@ -716,7 +716,7 @@ myApp.services = {
             break;
 
           case 1:
-            ons.notification.toast("Vacances ?", { timeout: 3000, animation: 'ascend' });
+            ons.notification.toast("Bonnes vacances !", { timeout: 3000, animation: 'ascend' });
 
             liste = ["Maillots de bain", "Creme solaire"];
 
@@ -728,7 +728,7 @@ myApp.services = {
             break;
 
           case 2:
-            ons.notification.toast("Week-end ?", { timeout: 3000, animation: 'ascend' });
+            ons.notification.toast("Bon Week-end !", { timeout: 3000, animation: 'ascend' });
 
             liste = ["Sandales", "Maillot de bain"];
 
