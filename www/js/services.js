@@ -69,16 +69,19 @@ myApp.services = {
                       return 1
                     } else if (b.date === "") {
                       return -1
+                    } else {
+                      return dateA > dateB ? 1 : -1;
                     }
-                    return 1;
+
+
                   } else {
                     if (a.date === "") {
                       return -1
                     } else if (b.date === "") {
                       return 1
+                    } else {
+                      return dateA < dateB ? 1 : -1;
                     }
-                    return -1;
-
                   }
                 }
 
