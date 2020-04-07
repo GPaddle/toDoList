@@ -10,6 +10,16 @@ myApp.services = {
   /////////////////
   tasks: {
 
+    refresh:function(){
+      myApp.services.tasks.removeAll();
+      let lcListe = JSON.parse(window.localStorage.getItem("liste"));
+
+      lcListe.forEach(element => {
+        myApp.services.tasks.create(element);
+      });
+    
+    },
+
     sort: function () {
       ons.notification.confirm(
         {
@@ -374,15 +384,8 @@ myApp.services = {
 
     // Modifies the inner data and current view of an existing task.
     update: function (taskItem, data) {
-      // console.log("TODO : regarder dans update, parfois PB");
 
       let localStorageList = JSON.parse(window.localStorage.getItem("liste"));
-
-      // console.log(taskItem);
-      // console.log("" + (window.localStorage.getItem("liste")));
-      // console.log("" + localStorageList);
-
-
 
       if (data.title !== taskItem.data.title) {
         // Update title view.
@@ -638,7 +641,7 @@ myApp.services = {
         switch (buttonIndex) {
           case 0:
 
-            let labels = [`Ajourd'hui`, `Demain`, `Dans la semaine`, `Annuler`]
+            let labels = [`Aujourd'hui`, `Demain`, `Dans la semaine`, `Annuler`]
 
             ons.notification.confirm(
               {

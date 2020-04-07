@@ -11,11 +11,11 @@ myApp.controllers = {
   //////////////////////////
   tabbarPage: function (page) {
 
-    page.querySelector(`[component="button/other-tasks"]`).addEventListener("click",function() {
+    page.querySelector(`[component="button/other-tasks"]`).addEventListener("click", function () {
       myApp.services.actions.affichageMenu();
     })
 
-    page.querySelector(`[component="button/sort-tasks"]`).addEventListener("click",function() {
+    page.querySelector(`[component="button/sort-tasks"]`).addEventListener("click", function () {
       myApp.services.tasks.sort();
     })
 
@@ -55,16 +55,54 @@ myApp.controllers = {
           message: `Les données précédentes vont être supprimées.`,
           buttonLabels: [`Abandonner`, `Confirmer`]
         }
-      ).then(function (buttonIndex) {        
+      ).then(function (buttonIndex) {
 
         if (buttonIndex === 1) {
           // Si `confirmer` a été pressé, on efface tout.
-          
+
           myApp.services.tasks.removeAll();
           // window.localStorage.setItem("liste", "");
 
 
         }
+      });
+    };
+
+    page.querySelector(`[component="button/supressCategory"]`).onclick = function () {
+      let labels = JSON.parse(window.localStorage.getItem("catégories"));
+      ons.notification.confirm(
+        {
+          title: `Quelle catégorie voulez-vous supprimer ?`,
+          message: `Ci dessous, la liste des catégories`,
+          buttonLabels: labels
+        }
+      ).then(function (buttonIndex) {
+        ons.notification.confirm(
+          {
+            title: `Confirmer`,
+            message: `Voulez-vous vraiment supprimer la catégorie ${labels[buttonIndex]} ? (Cette action est irréversible)`,
+            buttonLabels: ["oui", "non"]
+          }
+        ).then(function (buttonIndex2) {
+          if (buttonIndex2 == 0) {
+
+            let categorySelected = labels[buttonIndex];
+            let lcListe = JSON.parse(window.localStorage.getItem("liste"));
+
+            let i = lcListe.findIndex(e => e.category === categorySelected)
+
+            while (i != -1) {
+
+              lcListe.splice(i, 1);
+              i = lcListe.findIndex(e => e.category === categorySelected)
+
+            }
+
+            window.localStorage.setItem("liste", JSON.stringify(lcListe))
+
+            myApp.services.tasks.refresh();
+          }
+        });
       });
     };
 
@@ -85,10 +123,10 @@ myApp.controllers = {
 
     let toggleSwitch = page.querySelector("#archiveAuto")
     toggleSwitch.onchange = function () {
-      window.localStorage.setItem("archiveAuto",toggleSwitch.checked);
+      window.localStorage.setItem("archiveAuto", toggleSwitch.checked);
       if (toggleSwitch.checked) {
         ons.notification.toast("Les tâches s'archiveront automatiquement dès le prochain redémarrage", { timeout: 3000, animation: 'ascend' });
-      }else{
+      } else {
         ons.notification.toast("Archivage automatique désactivé", { timeout: 3000, animation: 'ascend' });
       }
     }
@@ -258,5 +296,5 @@ myApp.controllers = {
       }
     };
   }
-  
+
 };
