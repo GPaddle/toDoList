@@ -206,3 +206,7 @@ ons-splitter-side[side="left"][animation="overlay"] {
 #choose-sel {
   width: 90%;
 }
+
+.alert-dialog-button--material{
+  width: 100%;
+}

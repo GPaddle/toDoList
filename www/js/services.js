@@ -10,17 +10,18 @@ myApp.services = {
   /////////////////
   tasks: {
 
-    refresh:function(){
+    refresh: function () {
       myApp.services.tasks.removeAll();
       let lcListe = JSON.parse(window.localStorage.getItem("liste"));
 
       lcListe.forEach(element => {
         myApp.services.tasks.create(element);
       });
-    
+
     },
 
     sort: function () {
+      
       ons.notification.confirm(
         {
           title: `Trie`,
@@ -29,69 +30,77 @@ myApp.services = {
         }
       ).then(function (buttonIndex) {
 
-        let listeParse = JSON.parse(localStorage.getItem("liste"));
+        if (buttonIndex < 2) {
 
-        let tri;
 
-        ons.notification.confirm(
-          {
-            title: `Sens`,
-            message: `Comment trier ?`,
-            buttonLabels: ["croissant", "décroissant"]
-          }
+          let listeParse = JSON.parse(localStorage.getItem("liste"));
+
+          let tri;
+
+          ons.notification.confirm(
+            {
+              title: `Sens`,
+              message: `Comment trier ?`,
+              buttonLabels: ["croissant", "décroissant"]
+            }
           ).then(function (buttonIndex2) {
-            
-            
             switch (buttonIndex) {
               case 0:
-                  console.log("b");
-              const triTitre = function (a, b) {
-                if (buttonIndex2 === 0) {
-                  return a.title > b.title;
-                } else {
-                  return !(a.title > b.title);
-                }
-              }
-              tri = triTitre;
-              break;
-            case 1:
-              
-              const triDate = function (a, b) {
-                if (buttonIndex2 === 0) {
-                  if (a.date === "") {
-                    return true
-                  } else if (b.date === "") {
-                    return false
+                const triTitre = function (a, b) {
+                  if (buttonIndex2 === 0) {
+                    return a.title > b.title;
+                  } else {
+                    return !(a.title > b.title);
                   }
-                  return a.date > b.date;
-                }else{
-                  if (a.date === "") {
-                    return !true
-                  } else if (b.date === "") {
-                    return !false
-                  }
-                  return !(a.date > b.date);
-                  
                 }
+
+                tri = triTitre;
+
+                break;
+              case 1:
+
+                const triDate = function (a, b) {
+                  if (buttonIndex2 === 0) {
+                    if (a.date === "") {
+                      return true
+                    } else if (b.date === "") {
+                      return false
+                    }
+                    return a.date > b.date;
+                  } else {
+                    if (a.date === "") {
+                      return !true
+                    } else if (b.date === "") {
+                      return !false
+                    }
+                    return !(a.date > b.date);
+                    
+                  }
+                }
+                
+                tri = triDate;
+
+                break;
+                
+
+              default:
+                
+                break;
               }
-              tri = triDate;
+
+              listeParse.sort(tri);
+
+              myApp.services.tasks.resetLists();
               
-              break;
-            default:
-              break;
-          }
-
-          listeParse.sort(tri);
-        myApp.services.tasks.resetLists();
-
-        listeParse.forEach(element => {
-          myApp.services.tasks.create(element);
-        });
+              listeParse.forEach(element => {
+                myApp.services.tasks.create(element);
+            });
 
 
-        })
+          })
+        }
 
-        
+
 
       })
 
@@ -617,7 +626,7 @@ myApp.services = {
         {
           title: `Que voulez-vous faire ?`,
           message: `Ci-dessous, les tâches prédéfinies.`,
-          buttonLabels: [`Ajouter ma liste de courses`, `Affaires pour les vacances`, `Affaires pour le week-end`, `Annuler`]
+          buttonLabels: [`Ajouter ma liste de courses`, `Affaires pour les vacances`, `Affaires pour le week-end`, `<ons-icon icon="fa-cog"></ons-icon>`, `Annuler`]
         }
       ).then(function (buttonIndex) {
 
@@ -744,6 +753,10 @@ myApp.services = {
             break;
 
           case 3:
+            ons.notification.toast("Réglages ...", { timeout: 2000, animation: 'ascend' });
+            break;
+
+          case 4:
             break;
 
           default:

@@ -70,40 +70,50 @@ myApp.controllers = {
 
     page.querySelector(`[component="button/supressCategory"]`).onclick = function () {
       let labels = JSON.parse(window.localStorage.getItem("catégories"));
-      ons.notification.confirm(
-        {
-          title: `Quelle catégorie voulez-vous supprimer ?`,
-          message: `Ci dessous, la liste des catégories`,
-          buttonLabels: labels
-        }
-      ).then(function (buttonIndex) {
+
+      if (labels.length == 0) {
+        ons.notification.toast(`Il n'y a pas encore de catégories`, { timeout: 3000, animation: 'ascend' });
+      } else {
+        
+        labels.push("Annuler");
         ons.notification.confirm(
           {
-            title: `Confirmer`,
-            message: `Voulez-vous vraiment supprimer la catégorie ${labels[buttonIndex]} ? (Cette action est irréversible)`,
-            buttonLabels: ["oui", "non"]
+            title: `Quelle catégorie voulez-vous supprimer ?`,
+            message: `Ci dessous, la liste des catégories`,
+            buttonLabels: labels
           }
-        ).then(function (buttonIndex2) {
-          if (buttonIndex2 == 0) {
+        ).then(function (buttonIndex) {
+          if (buttonIndex != labels.length() - 1) {
 
-            let categorySelected = labels[buttonIndex];
-            let lcListe = JSON.parse(window.localStorage.getItem("liste"));
+            ons.notification.confirm(
+              {
+                title: `Confirmer`,
+                message: `Voulez-vous vraiment supprimer la catégorie ${labels[buttonIndex]} ? (Cette action est irréversible)`,
+                buttonLabels: ["oui", "non"]
+              }
+            ).then(function (buttonIndex2) {
+              if (buttonIndex2 == 0) {
 
-            let i = lcListe.findIndex(e => e.category === categorySelected)
+                let categorySelected = labels[buttonIndex];
+                let lcListe = JSON.parse(window.localStorage.getItem("liste"));
 
-            while (i != -1) {
+                let i = lcListe.findIndex(e => e.category === categorySelected)
 
-              lcListe.splice(i, 1);
-              i = lcListe.findIndex(e => e.category === categorySelected)
+                while (i != -1) {
 
-            }
+                  lcListe.splice(i, 1);
+                  i = lcListe.findIndex(e => e.category === categorySelected)
 
-            window.localStorage.setItem("liste", JSON.stringify(lcListe))
+                }
 
-            myApp.services.tasks.refresh();
+                window.localStorage.setItem("liste", JSON.stringify(lcListe))
+
+                myApp.services.tasks.refresh();
+              }
+            });
           }
         });
-      });
+      }
     };
 
     page.querySelector(`[component="button/suppressDatePassed"]`).onclick = function () {
