@@ -4,3 +4,4 @@ plugins/
 www/lib/
 node_modules
 *.zip
+rendus/

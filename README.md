@@ -7,3 +7,6 @@
 - Fonctionnalté de tris (date et titre)
 - Ajout de tâches prédéfinies
 - Possibilités de supprimer toutes les tâches
+- Suppression par catégorie
+
+- Notification lors de l'ouverture de l'application si une tâche va bientôt expirer

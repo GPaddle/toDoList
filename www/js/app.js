@@ -42,7 +42,7 @@ document.addEventListener(`init`, function (event) {
     ) {
 
       let initialised = window.localStorage.getItem("init");
-      
+
       if (!initialised || lancement) {
 
 
@@ -92,8 +92,22 @@ document.addEventListener(`init`, function (event) {
       let listeTache = window.localStorage.getItem("liste");
       if (listeTache != "") {
 
+        const isToday = function (date) {
+          let today = new Date();
+          let dateTest = new Date(date);
+
+          return dateTest.getDate() == today.getDate() &&
+            dateTest.getMonth() == today.getMonth() &&
+            dateTest.getFullYear() == today.getFullYear()
+        }
+
         let listeTacheParse = JSON.parse(listeTache);
         listeTacheParse.forEach(function (data) {
+
+          if (isToday(data.date) && (data.state == 0 || data.state == 1)) {
+            ons.notification.alert(`${data.title} va expirer aujourd'hui`, { cancelable: true, title: "Bientôt terminé ?" });
+          }
+
           myApp.services.tasks.create(data);
         });
       } else {
@@ -108,12 +122,6 @@ document.addEventListener(`init`, function (event) {
       if (valeur) {
         myApp.services.tasks.majDatePassee();
       }
-
-
-
-      // myApp.services.fixtures.forEach(function (data) {
-      //   myApp.services.tasks.create(data);
-      // });
     }
   }
 });
