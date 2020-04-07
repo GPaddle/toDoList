@@ -21,7 +21,7 @@ myApp.services = {
     },
 
     sort: function () {
-      
+
       ons.notification.confirm(
         {
           title: `Trie`,
@@ -47,10 +47,10 @@ myApp.services = {
             switch (buttonIndex) {
               case 0:
                 const triTitre = function (a, b) {
-                  if (buttonIndex2 === 0) {
-                    return a.title > b.title;
+                  if (buttonIndex2 == 0) {
+                    return a.title < b.title ? 1 : -1;
                   } else {
-                    return !(a.title > b.title);
+                    return a.title > b.title ? 1 : -1;
                   }
                 }
 
@@ -60,40 +60,44 @@ myApp.services = {
               case 1:
 
                 const triDate = function (a, b) {
+
+                  let dateA = new Date(a.date)
+                  let dateB = new Date(b.date)
+
                   if (buttonIndex2 === 0) {
                     if (a.date === "") {
-                      return true
+                      return 1
                     } else if (b.date === "") {
-                      return false
+                      return -1
                     }
-                    return a.date > b.date;
+                    return 1;
                   } else {
                     if (a.date === "") {
-                      return !true
+                      return -1
                     } else if (b.date === "") {
-                      return !false
+                      return 1
                     }
-                    return !(a.date > b.date);
-                    
+                    return -1;
+
                   }
                 }
-                
+
                 tri = triDate;
 
                 break;
-                
+
 
               default:
-                
+
                 break;
-              }
+            }
 
-              listeParse.sort(tri);
+            listeParse.sort(tri);
 
-              myApp.services.tasks.resetLists();
-              
-              listeParse.forEach(element => {
-                myApp.services.tasks.create(element);
+            myApp.services.tasks.resetLists();
+
+            listeParse.forEach(element => {
+              myApp.services.tasks.create(element);
             });
 
 
