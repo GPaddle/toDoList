@@ -215,7 +215,7 @@ myApp.services = {
 
       // Task item template.
       var taskItem = ons.createElement(
-        `<ons-list-item tappable category="${myApp.services.categories.parseId(data.category)}"> 
+        `<ons-list-item tappable class ="draggable" draggable="true" category="${myApp.services.categories.parseId(data.category)}"> 
           
           <label class="left">
             <ons-button modifier="quiet" id="b0" class="${state0}">

@@ -210,3 +210,12 @@ ons-splitter-side[side="left"][animation="overlay"] {
 .alert-dialog-button--material{
   width: 100%;
 }
+
+
+.draggable {
+  cursor: move;
+}
+
+.draggable.dragging {
+  opacity: .5;
+}
